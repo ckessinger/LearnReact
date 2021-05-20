@@ -1,4 +1,3 @@
-import { render } from "@testing-library/react";
 import { Component } from "react";
 import { Card, CardImg, CardText, CardBody, CardTitle } from 'reactstrap';
 
@@ -18,7 +17,7 @@ class CampsiteInfo extends Component {
     }
 
     renderComments(comments) {
-        if(comments) {
+        if (comments) {
             return (
                 <div className="col-md-5 m-1">
                     <h4>Comments</h4>
@@ -37,9 +36,9 @@ class CampsiteInfo extends Component {
             );
         }
         return (
-        <div>
+            <div>
 
-        </div>
+            </div>
         );
     }
 
@@ -48,9 +47,11 @@ class CampsiteInfo extends Component {
     render() {
         if (this.props.campsite) {
             return (
-                <div className="row">
-                    {this.renderCampsite(this.props.campsite)}
-                    {this.renderComments(this.props.campsite.comments)}
+                <div className="container">
+                    <div className="row">
+                        {this.renderCampsite(this.props.campsite)}
+                        {this.renderComments(this.props.campsite.comments)}
+                    </div>
                 </div>
             );
         }
