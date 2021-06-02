@@ -20,7 +20,7 @@ function RenderCampsite({ campsite }) {
     );
 }
 
-function RenderComments({ comments }) {
+function RenderComments({ comments, addComment, campsiteId }) {
     if (comments) {
         return (
             <div className="col-md-5 m-1">
@@ -36,7 +36,7 @@ function RenderComments({ comments }) {
                         </div>
                     );
                 })}
-                <CommentForm />
+                <CommentForm campsiteId={campsiteId} addComment={addComment} />
             </div>
         );
     }
@@ -65,7 +65,11 @@ function CampsiteInfo(props) {
                 </div>
                 <div className="row">
                     <RenderCampsite campsite={props.campsite} />
-                    <RenderComments comments={props.comments} />
+                    <RenderComments
+                        comments={props.comments}
+                        addComment={props.addComment}
+                        campsiteId={props.campsite.id}
+                    />
                 </div>
             </div>
         );
@@ -101,8 +105,8 @@ class CommentForm extends Component {
     }
 
     handleSubmit(values) {
-        console.log("Current State is: " + JSON.stringify(values));
-        alert("Current State is " + JSON.stringify(values));
+        this.toggleModal();
+        this.props.addComment(this.props.campsiteId, values.rating, values.author, values.text);
     };
 
     render() {
@@ -112,16 +116,16 @@ class CommentForm extends Component {
                 <Modal isOpen={this.state.isModalOpen} toggle={this.toggleModal}>
                     <ModalHeader toggle={this.toggleModal}>Submit Comment</ModalHeader>
                     <ModalBody>
-                    <LocalForm onSubmit={values=>this.handleSubmit(values)}>
+                        <LocalForm onSubmit={values => this.handleSubmit(values)}>
                             <div className="form-group">
                                 <Label htmlFor="rating" md={2}>Rating</Label>
                                 <div md={10}>
                                     <Control.select model=".rating" id="rating" name="rating" className="form-control">
-                                            <option>1</option>
-                                            <option>2</option>
-                                            <option>3</option>
-                                            <option>4</option>
-                                            <option>5</option>
+                                        <option>1</option>
+                                        <option>2</option>
+                                        <option>3</option>
+                                        <option>4</option>
+                                        <option>5</option>
                                     </Control.select>
                                 </div>
                             </div>
@@ -129,39 +133,39 @@ class CommentForm extends Component {
                                 <Label htmlFor="author" md={2}>Your Name</Label>
                                 <div md={10}>
                                     <Control.text model=".author" id="author" name="author" placeholder="Your Name" className="form-control"
-                                            validators={{
-                                                required, 
-                                                minLength: minLength(2),
-                                                maxLength: maxLength(15)
-                                                        }}
+                                        validators={{
+                                            required,
+                                            minLength: minLength(2),
+                                            maxLength: maxLength(15)
+                                        }}
                                     />
                                     <Errors
-                                            className="text-danger"
-                                            model=".author"
-                                            show="touched"
-                                            component="div"
-                                            messages={{
-                                                required: 'Required',
-                                                minLength: 'Must be at least 2 characters',
-                                                maxLength: 'Must be 15 characters or less'
-                                            }}
+                                        className="text-danger"
+                                        model=".author"
+                                        show="touched"
+                                        component="div"
+                                        messages={{
+                                            required: 'Required',
+                                            minLength: 'Must be at least 2 characters',
+                                            maxLength: 'Must be 15 characters or less'
+                                        }}
                                     />
                                 </div>
                             </div>
                             <div className="form-group">
-                                    <Label htmlFor="text" md={2}>Comment</Label>
-                                    <div md={10}>
+                                <Label htmlFor="text" md={2}>Comment</Label>
+                                <div md={10}>
                                     <Control.textarea model=".text" id="text" name="text" rows="6" className="form-control" />
-                                    </div>
                                 </div>
-                                <div>
-                                    <div md={{size: 10, offset: 2}}>
-                                        <Button type="submit" color="primary">
-                                            Submit
+                            </div>
+                            <div>
+                                <div md={{ size: 10, offset: 2 }}>
+                                    <Button type="submit" color="primary">
+                                        Submit
                                         </Button>
-                                    </div>
                                 </div>
-                            </LocalForm>
+                            </div>
+                        </LocalForm>
                     </ModalBody>
                 </Modal>
 
